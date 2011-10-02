@@ -3,7 +3,7 @@
 MemberModel::MemberModel(QObject *parent)
     : QAbstractTableModel(parent)
 {
-    //Do Nothing Here!
+    //    MemberInfoArray  m_memberInfoArray;
 }
 
 MemberModel::~MemberModel()
@@ -13,12 +13,12 @@ MemberModel::~MemberModel()
 
 int MemberModel::rowCount(const QModelIndex&) const
 {
-    return 5;
+    return m_memberInfoArray.size();
 }
 
 int MemberModel::columnCount(const QModelIndex&) const
 {
-    return 3;
+    return m_memberInfoArray.headerSize();
 }
 
 QVariant MemberModel::data(const QModelIndex &index, int role) const
@@ -26,6 +26,14 @@ QVariant MemberModel::data(const QModelIndex &index, int role) const
     if (!index.isValid())
 	return QVariant();
 
+    switch(role) {
+    case Qt::DisplayRole:
+	return m_memberInfoArray.data(index.row(), index.column());
+    case Qt::EditRole:
+	return m_memberInfoArray.data(index.row(), index.column());
+    default:
+	return QVariant();
+    }
     if (role == Qt::DisplayRole || role == Qt::EditRole) {
 	return QVariant("My Test");
     }else {
@@ -38,16 +46,7 @@ QVariant MemberModel::headerData(int section,
 				 int role) const
 {
     if (orientation == Qt::Horizontal && role == Qt::DisplayRole) {
-	switch (section) {
-	case 0:
-	    return tr("Name");
-	case 1:
-	    return tr("Attributes");
-	case 2:
-	    return tr("Value");
-	default:
-	    return QVariant();
-	}
+	return m_memberInfoArray.headerData(section);
     }else if (orientation == Qt::Vertical && role == Qt::DisplayRole) {
 	return QVariant(section + 1);
     }
@@ -63,4 +62,14 @@ Qt::ItemFlags MemberModel::flags(const QModelIndex & index) const
 	Qt::ItemIsSelectable | Qt::ItemIsEditable;
 	//Qt::ItemIsSelectable  | Qt::ItemIsEditable |
 	//Qt::ItemIsUserCheckable | Qt::ItemIsTristate;
+}
+
+bool MemberModel::setData(const QModelIndex & index, 
+			 const QVariant & value, int role)
+{
+    bool flag = m_memberInfoArray.setData(index.row(), index.column(), value);
+    if(flag == true) {
+	emit dataChanged(index,index);
+    }
+    return flag;
 }

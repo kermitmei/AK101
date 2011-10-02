@@ -3,6 +3,8 @@
 
 #include <QAbstractTableModel>
 
+#include "MemberInfoArray.h"
+
 class MemberModel : public QAbstractTableModel
 {
     Q_OBJECT;
@@ -16,14 +18,17 @@ public:
     virtual int rowCount(const QModelIndex&) const;
     virtual int columnCount(const QModelIndex&) const;
     virtual QVariant data(const QModelIndex&, int) const;
+    virtual bool setData(const QModelIndex & index, 
+			const QVariant & value, int role = Qt::EditRole );
 
-    QVariant headerData(int section, 
-			Qt::Orientation orientation, 
-			int role = Qt::DisplayRole) const;
-    Qt::ItemFlags flags(const QModelIndex & index) const;
+    virtual QVariant headerData(int section, 
+				Qt::Orientation orientation, 
+				int role = Qt::DisplayRole) const;
+    virtual Qt::ItemFlags flags(const QModelIndex & index) const;
 
 
 protected:
+    MemberInfoArray  m_memberInfoArray;
 };
 
 #endif//_MEMBERMODEL_H_
