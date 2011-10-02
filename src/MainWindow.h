@@ -4,6 +4,8 @@
 #include <QMainWindow>
 #include "ui_MainWindow.h"
 
+class MemberModel;
+
 class MainWindow : public QMainWindow,
 		   public Ui::MainWindow
 {
@@ -11,6 +13,9 @@ class MainWindow : public QMainWindow,
 public:
     MainWindow(QWidget *parent = 0);
     ~MainWindow();
+
+protected:
+    MemberModel  *m_memberModel;
 };
 
 

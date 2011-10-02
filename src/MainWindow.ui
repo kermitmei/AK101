@@ -56,7 +56,7 @@
          </size>
         </property>
         <property name="styleSheet">
-         <string notr="true">border-image: url(:/pics/szdiy_logo.png);</string>
+         <string notr="true">border-image: url(:/szdiy_logo.png);</string>
         </property>
         <property name="text">
          <string/>
@@ -99,7 +99,7 @@
        </widget>
       </item>
       <item row="1" column="0" colspan="5">
-       <widget class="QTableView" name="m_listView"/>
+       <widget class="QTableView" name="m_memberView"/>
       </item>
       <item row="0" column="3">
        <spacer name="m_horizontalSpacer">
@@ -147,28 +147,35 @@
     <addaction name="actionOpen_Database"/>
     <addaction name="actionConnect_to_Serial"/>
     <addaction name="actionEixt"/>
+    <addaction name="separator"/>
+    <addaction name="actionExit"/>
    </widget>
    <addaction name="menuFile"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionOpen_Database">
    <property name="text">
-    <string>Open Database</string>
+    <string>Open</string>
    </property>
   </action>
   <action name="actionConnect_to_Serial">
    <property name="text">
-    <string>Connect to Serial</string>
+    <string>Add</string>
    </property>
   </action>
   <action name="actionEixt">
    <property name="text">
-    <string>Eixt</string>
+    <string>Submit</string>
+   </property>
+  </action>
+  <action name="actionExit">
+   <property name="text">
+    <string>Exit</string>
    </property>
   </action>
  </widget>
  <resources>
-  <include location="pixmaps.qrc"/>
+  <include location="pics/pixmaps.qrc"/>
  </resources>
  <connections/>
 </ui>
