@@ -10,8 +10,6 @@
 MemberModel::MemberModel(QObject *parent)
     : QAbstractTableModel(parent)
 {
-    readFromXml("./hackers.xml");
-
     //    MemberInfoArray  m_memberArray;
 }
 
@@ -24,7 +22,7 @@ bool MemberModel::readFromXml(const QString &fileName)
 {
     QFile file(fileName);
 
-    if(!file.open(QFile::ReadOnly | QFile::Text)) {
+    if(!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
 	qDebug() << "File open error!";
 	return false;
     }
@@ -77,7 +75,31 @@ bool MemberModel::readFromXml(const QString &fileName)
 
 bool MemberModel::writeToXml(const QString &fileName)
 {
-    Q_UNUSED(fileName);
+    QFile file(fileName);
+    if(!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+	qDebug() << "Write file error!";
+	return false;
+    }
+
+    QVector<QString>  headerData(m_memberArray.headerSize());
+    for(int i = 0; i < m_memberArray.headerSize(); ++i) {
+	headerData[m_memberArray.headerData()[i].first]
+	    = m_memberArray.headerData()[i].second.toString();
+    }
+
+    QXmlStreamWriter  xmlWriter(&file);
+    xmlWriter.setAutoFormatting(true);
+    xmlWriter.writeStartDocument();
+    xmlWriter.writeStartElement(XML_MAIN);
+    foreach(Member member, m_memberArray.memberArray()) {
+	xmlWriter.writeStartElement(XML_MEMBER);
+	for(int i = 0; i < headerData.size(); ++i) {
+	    xmlWriter.writeTextElement(headerData[i],member[i].toString());
+	}
+	xmlWriter.writeEndElement();            //XML_MEMBER
+    }
+    xmlWriter.writeEndElement(); // XML_MAIN
+    xmlWriter.writeEndDocument();
     return true;
 }
 

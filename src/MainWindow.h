@@ -14,8 +14,13 @@ public:
     MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+public slots:
+    void openFile();
+    void saveFile();
+
 protected:
     MemberModel  *m_memberModel;
+    QString       m_fileName;
 };
 
 

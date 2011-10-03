@@ -35,7 +35,11 @@ public:
     int  size() const
     { return m_memberArray.size(); }
 
+    const QVector<QPair<int, QVariant> >  &headerData() const
+    { return m_headerData; }
+
     const QVariant &headerData(int section) const;
+
     int headerSize() const
     { return m_headerData.size(); }
 
@@ -81,6 +85,9 @@ public:
     Member &last()
     { return m_memberArray.last(); }
 
+    const QVector<Member> &memberArray() const
+    { return m_memberArray; }
+
     const Member & operator[](int i) const
     { return m_memberArray[i]; }
 
@@ -93,8 +100,5 @@ protected:
     QVector<QPair<int, QVariant> >	m_headerData;
     QVector<Member>			m_memberArray;
 };
-
-
-
 
 #endif//_MEMBERARRAY_H_
