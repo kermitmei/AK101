@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Memberspace SYSTEM "tree2.dtd">
+<szdiy>
+  <member>
+    <RFID>00000000</RFID>
+    <name>SZDIYer</name>
+    <profession>Member</profession>
+    <purpose>@@</purpose>
+    <email>member@nirvana</email>
+    <MAC>00:11:22:33:44:55</MAC>
+  </member>
+  <member>
+    <RFID>ddd</RFID>
+    <name>ddd</name>
+    <profession>dddddd</profession>
+    <purpose>ddddd</purpose>
+    <email>ddddddd@dd.d</email>
+    <MAC>ddddddddd</MAC>
+  </member>
+  <member>
+    <RFID>fff</RFID>
+    <name>fff</name>
+    <profession>fffff</profession>
+    <purpose>fffff</purpose>
+    <email>fdddd@dd.d</email>
+    <MAC>ffffffff</MAC>
+  </member>
+  <member>
+    <RFID>fffdd</RFID>
+    <name>fffdd</name>
+    <profession>fffff</profession>
+    <purpose>fffff</purpose>
+    <email>fdddd@dd.d</email>
+    <MAC>ffffffff</MAC>
+  </member>
+  <member>
+    <RFID>fffddss</RFID>
+    <name>fffddss</name>
+    <profession>fffffdscds</profession>
+    <purpose>fffffdsd</purpose>
+    <email>fdddd@dd.d</email>
+    <MAC>ffffffff</MAC>
+  </member>
+  <member>
+    <RFID>dfd</RFID>
+    <name>dfd</name>
+    <profession>fdasdf</profession>
+    <purpose>fdafd</purpose>
+    <email>dfas@dad.d</email>
+    <MAC>fdafda</MAC>
+  </member>
+</szdiy>

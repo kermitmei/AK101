@@ -1,20 +1,20 @@
-#include "MemberInfoArray.h"
+#include "MemberArray.h"
 
-const QVariant MemberInfoArray::m_errorInfo("###");
+const QVariant MemberArray::m_errorInfo("###");
 
-MemberInfo::MemberInfo(int index)
+Member::Member(int index)
     : m_attributes(index, QString("---"))
 {
     ;
 }
 
 
-MemberInfo::~MemberInfo()
+Member::~Member()
 {
     //Do Nothing Here!
 }
 
-void MemberInfo::setAttribute(int index, const QVariant &attribute)
+void Member::setAttribute(int index, const QVariant &attribute)
 { 
     if(index < m_attributes.size()) {
 	m_attributes[index] = attribute;
@@ -26,17 +26,17 @@ void MemberInfo::setAttribute(int index, const QVariant &attribute)
     }
 }
 
-MemberInfoArray::MemberInfoArray()
+MemberArray::MemberArray()
 {
     ;
 }
 
-MemberInfoArray::~MemberInfoArray()
+MemberArray::~MemberArray()
 {
     ;
 }
 
-const QVariant &MemberInfoArray::headerData(int section) const
+const QVariant &MemberArray::headerData(int section) const
 {
     if(section >= m_headerData.size())
 	return m_errorInfo;
@@ -44,7 +44,7 @@ const QVariant &MemberInfoArray::headerData(int section) const
 	return m_headerData[section].second;
 }
 
-void MemberInfoArray::setHeaderData(const QVector<QVariant> &headerData)
+void MemberArray::setHeaderData(const QVector<QVariant> &headerData)
 {
     m_headerData.clear();
     for(int i = 0; i < headerData.size(); ++i) {
@@ -52,7 +52,7 @@ void MemberInfoArray::setHeaderData(const QVector<QVariant> &headerData)
     }
 }
 
-bool MemberInfoArray::replaceHeaderData(int c1, int c2)
+bool MemberArray::replaceHeaderData(int c1, int c2)
 {
     if(c1 < m_headerData.size() || c2 < m_headerData.size())
 	return false;

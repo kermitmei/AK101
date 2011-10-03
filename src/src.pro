@@ -3,12 +3,14 @@
 ######################################################################
 
 TEMPLATE = app
-TARGET = 
+TARGET = test
 DEPENDPATH += . pics
 INCLUDEPATH += .
 
+QT += xml
+
 # Input
-HEADERS += MainWindow.h MemberInfoArray.h MemberModel.h
+HEADERS += MainWindow.h MemberArray.h MemberModel.h
 FORMS += MainWindow.ui
-SOURCES += main.cpp MainWindow.cpp MemberInfoArray.cpp MemberModel.cpp
+SOURCES += main.cpp MainWindow.cpp MemberArray.cpp MemberModel.cpp
 RESOURCES += pics/pixmaps.qrc

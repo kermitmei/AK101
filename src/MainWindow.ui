@@ -144,31 +144,31 @@
     <property name="title">
      <string>File</string>
     </property>
-    <addaction name="actionOpen_Database"/>
-    <addaction name="actionConnect_to_Serial"/>
-    <addaction name="actionEixt"/>
+    <addaction name="m_openAction"/>
+    <addaction name="m_addAction"/>
+    <addaction name="m_submitAction"/>
     <addaction name="separator"/>
-    <addaction name="actionExit"/>
+    <addaction name="m_exitAction"/>
    </widget>
    <addaction name="menuFile"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
-  <action name="actionOpen_Database">
+  <action name="m_openAction">
    <property name="text">
     <string>Open</string>
    </property>
   </action>
-  <action name="actionConnect_to_Serial">
+  <action name="m_addAction">
    <property name="text">
     <string>Add</string>
    </property>
   </action>
-  <action name="actionEixt">
+  <action name="m_submitAction">
    <property name="text">
     <string>Submit</string>
    </property>
   </action>
-  <action name="actionExit">
+  <action name="m_exitAction">
    <property name="text">
     <string>Exit</string>
    </property>
@@ -177,5 +177,22 @@
  <resources>
   <include location="pics/pixmaps.qrc"/>
  </resources>
- <connections/>
+ <connections>
+  <connection>
+   <sender>m_exitAction</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>359</x>
+     <y>242</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

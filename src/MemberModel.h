@@ -3,7 +3,7 @@
 
 #include <QAbstractTableModel>
 
-#include "MemberInfoArray.h"
+#include "MemberArray.h"
 
 class MemberModel : public QAbstractTableModel
 {
@@ -28,7 +28,7 @@ public:
 
 
 protected:
-    MemberInfoArray  m_memberInfoArray;
+    MemberArray  m_memberArray;
 };
 
 #endif//_MEMBERMODEL_H_
