@@ -15,8 +15,8 @@ public:
     bool readFromXml(const QString &fileName);
     bool writeToXml(const QString &fileName);
 
-    virtual int rowCount(const QModelIndex&) const;
-    virtual int columnCount(const QModelIndex&) const;
+    virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
     virtual QVariant data(const QModelIndex&, int) const;
     virtual bool setData(const QModelIndex & index, 
 			const QVariant & value, int role = Qt::EditRole );
@@ -24,8 +24,12 @@ public:
     virtual QVariant headerData(int section, 
 				Qt::Orientation orientation, 
 				int role = Qt::DisplayRole) const;
+
     virtual Qt::ItemFlags flags(const QModelIndex & index) const;
 
+public slots:
+    void appendMember();
+    void submitMember();
 
 protected:
     MemberArray  m_memberArray;

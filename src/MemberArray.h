@@ -6,6 +6,9 @@
 #include <QPair>
 #include <QModelIndex>
 
+#include "SubmitThread.h"
+
+
 class Member
 {
     friend class MemberArray;
@@ -22,7 +25,14 @@ public:
     QVariant & operator[](int i)
     { return m_attributes[i]; }
 
+    bool isSubmitted() const
+    { return m_isSubmitted;   }
+
+    void setSubmitted(bool status)
+    { m_isSubmitted = status; }
+
 protected:
+    bool               m_isSubmitted;
     QVector<QVariant>  m_attributes;
 };
 
@@ -94,9 +104,11 @@ public:
     Member & operator[](int i)
     { return m_memberArray[i]; }
 
+    void submit();
+
 protected:
     static const QVariant		m_errorInfo;
-
+    SubmitThread                        m_submitThread;
     QVector<QPair<int, QVariant> >	m_headerData;
     QVector<Member>			m_memberArray;
 };

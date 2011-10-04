@@ -3,7 +3,9 @@
 const QVariant MemberArray::m_errorInfo("###");
 
 Member::Member(int index)
-    : m_attributes(index, QString("---"))
+    : m_isSubmitted(false),
+      m_attributes(index)
+
 {
     ;
 }
@@ -61,4 +63,18 @@ bool MemberArray::replaceHeaderData(int c1, int c2)
     m_headerData[c2] = m_headerData[c1];
     m_headerData[c1] = tmp;
     return true;
+}
+
+void MemberArray::submit()
+{
+    qDebug(" MemberArray::submit()");
+    for(int i = 0; i < m_memberArray.size(); ++i) {
+	if(!m_memberArray[i].isSubmitted() && 
+	   !m_memberArray[i][0].toString().isEmpty()) 
+	{
+	    qDebug("SBM: %s", qPrintable(m_memberArray[i][1].toString()));
+	    m_submitThread.submit(m_memberArray[i][1].toString());
+	    m_memberArray[i].setSubmitted(true);
+	}
+    }
 }

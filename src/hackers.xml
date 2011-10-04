@@ -2,7 +2,7 @@
 <szdiy>
     <member>
         <RFID>00000001</RFID>
-        <name>Anders Ma</name>
+        <name>AndersMa</name>
         <profession>Linux/C</profession>
         <purpose>Manager</purpose>
         <email>anders.ma@gmail.com</email>
@@ -42,10 +42,10 @@
     </member>
     <member>
         <RFID>00000006</RFID>
-        <name>Unknow</name>
-        <profession>fdasdf</profession>
-        <purpose>fdafd</purpose>
-        <email>dfas@dad.d</email>
+        <name>MiaoDeZhi</name>
+        <profession>Linux/Mac/Iphone</profession>
+        <purpose>Study/Hacker</purpose>
+        <email>miaodezhi@gamil.com</email>
         <MAC>00:11:22:33:34:55</MAC>
     </member>
 </szdiy>

@@ -7,10 +7,20 @@ TARGET = test
 DEPENDPATH += . pics
 INCLUDEPATH += .
 
-QT += xml
+QT += xml network
+
 
 # Input
-HEADERS += MainWindow.h MemberArray.h MemberModel.h
 FORMS += MainWindow.ui
-SOURCES += main.cpp MainWindow.cpp MemberArray.cpp MemberModel.cpp
 RESOURCES += pics/pixmaps.qrc
+
+HEADERS += MainWindow.h    \
+           MemberArray.h   \  
+           MemberModel.h   \
+           SubmitThread.h
+
+SOURCES += main.cpp        \
+           MainWindow.cpp  \
+           MemberArray.cpp \
+           MemberModel.cpp \
+           SubmitThread.cpp

@@ -12,6 +12,9 @@ MainWindow::MainWindow(QWidget *parent)
     setupUi(this);
     connect(m_openAction, SIGNAL(triggered()), this, SLOT(openFile()));
     connect(m_saveAction, SIGNAL(triggered()), this, SLOT(saveFile()));
+    connect(m_submitAction, SIGNAL(triggered()), 
+	    m_memberModel,  SLOT(submitMember()));
+    m_memberView->setVerticalScrollMode(QAbstractItemView::ScrollPerItem);
 }
 
 MainWindow::~MainWindow()
@@ -24,8 +27,13 @@ void MainWindow::openFile()
     m_fileName = QFileDialog::getOpenFileName(this, tr("Open File"),
 					      ".",  tr("XML files (*.xml)"));
 
-    if(m_memberModel->readFromXml(m_fileName))
+    if(m_memberModel->readFromXml(m_fileName)) {
 	m_memberView->setModel(m_memberModel);
+	int width = m_memberView->width() / m_memberModel->columnCount();
+	for(int i = 0; i < m_memberModel->columnCount(); ++i) {
+	    m_memberView->setColumnWidth(i,width-3);
+	}
+    }
 }
 
 void MainWindow::saveFile()
@@ -38,3 +46,4 @@ void MainWindow::saveFile()
 	QMessageBox::warning(this, tr("Save File"),tr("Save File Error!"));
     }
 }
+

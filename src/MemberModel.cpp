@@ -169,3 +169,14 @@ bool MemberModel::setData(const QModelIndex & index,
 	return false;
     }
 }
+
+void MemberModel::appendMember()
+{
+    ;
+}
+
+
+void MemberModel::submitMember()
+{ 
+    m_memberArray.submit(); 
+}
