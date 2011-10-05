@@ -126,11 +126,6 @@ QVariant MemberModel::data(const QModelIndex &index, int role) const
     default:
 	return QVariant();
     }
-    if (role == Qt::DisplayRole || role == Qt::EditRole) {
-	return QVariant("My Test");
-    }else {
-	return QVariant();
-    }
 }
 
 QVariant MemberModel::headerData(int section, 
@@ -172,7 +167,12 @@ bool MemberModel::setData(const QModelIndex & index,
 
 void MemberModel::appendMember()
 {
-    ;
+    int row = rowCount();
+    QModelIndex rowIndex = index(row,0);
+    beginInsertRows(rowIndex, row, row );
+    m_memberArray.appendMember(Member(m_memberArray.headerSize()));
+    endInsertRows();
+    qDebug("rowCount =%d, size=%d",rowCount(),m_memberArray.size());
 }
 
 

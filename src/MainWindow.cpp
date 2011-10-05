@@ -14,6 +14,9 @@ MainWindow::MainWindow(QWidget *parent)
     connect(m_saveAction, SIGNAL(triggered()), this, SLOT(saveFile()));
     connect(m_submitAction, SIGNAL(triggered()), 
 	    m_memberModel,  SLOT(submitMember()));
+    connect(m_addAction, SIGNAL(triggered()), this, SLOT(addMember()));
+	    
+
     m_memberView->setVerticalScrollMode(QAbstractItemView::ScrollPerItem);
 }
 
@@ -47,3 +50,7 @@ void MainWindow::saveFile()
     }
 }
 
+void MainWindow::addMember()
+{
+    m_memberModel->appendMember();
+}

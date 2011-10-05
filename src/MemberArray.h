@@ -8,7 +8,6 @@
 
 #include "SubmitThread.h"
 
-
 class Member
 {
     friend class MemberArray;

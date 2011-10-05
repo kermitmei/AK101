@@ -5,7 +5,6 @@ const QVariant MemberArray::m_errorInfo("###");
 Member::Member(int index)
     : m_isSubmitted(false),
       m_attributes(index)
-
 {
     ;
 }
@@ -70,7 +69,7 @@ void MemberArray::submit()
     qDebug(" MemberArray::submit()");
     for(int i = 0; i < m_memberArray.size(); ++i) {
 	if(!m_memberArray[i].isSubmitted() && 
-	   !m_memberArray[i][0].toString().isEmpty()) 
+	   !m_memberArray[i][1].toString().isEmpty()) 
 	{
 	    qDebug("SBM: %s", qPrintable(m_memberArray[i][1].toString()));
 	    m_submitThread.submit(m_memberArray[i][1].toString());

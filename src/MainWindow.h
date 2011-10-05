@@ -17,6 +17,8 @@ public:
 public slots:
     void openFile();
     void saveFile();
+    void addMember();
+
 protected:
     MemberModel  *m_memberModel;
     QString       m_fileName;
