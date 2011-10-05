@@ -6,7 +6,7 @@
 #include <QPair>
 #include <QModelIndex>
 
-#include "SubmitThread.h"
+#include "SubmitManager.h"
 
 class Member
 {
@@ -107,7 +107,7 @@ public:
 
 protected:
     static const QVariant		m_errorInfo;
-    SubmitThread                        m_submitThread;
+    SubmitManager                       m_submitManager;
     QVector<QPair<int, QVariant> >	m_headerData;
     QVector<Member>			m_memberArray;
 };

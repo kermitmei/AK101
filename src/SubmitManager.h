@@ -1,5 +1,5 @@
-#ifndef _SUBMITTHREAD_H_
-#define _SUBMITTHREAD_H_
+#ifndef _SUBMITMANAGER_H_
+#define _SUBMITMANAGER_H_
 
 #include <QNetworkAccessManager>
 #include <QList>
@@ -12,12 +12,12 @@
 class QNetworkReply;
 class Member;
 
-class SubmitThread : public QNetworkAccessManager
+class SubmitManager : public QNetworkAccessManager
 {
     Q_OBJECT;
 public:
-    SubmitThread(QObject *parent = 0);
-    ~SubmitThread();
+    SubmitManager(QObject *parent = 0);
+    ~SubmitManager();
 
     void setPasswd(const QString &passwd)
     { m_passwd = passwd; }
@@ -37,4 +37,5 @@ protected:
     QNetworkReply          *m_reply;
 };
 
-#endif//_SUBMITTHREAD_H_
+
+#endif//_SUBMITMANAGER_H_

@@ -27,15 +27,23 @@ MainWindow::~MainWindow()
 
 void MainWindow::openFile()
 {
+    if(!m_fileName.isEmpty()) {
+	QMessageBox::warning(this, 
+	     tr("Open File"),
+	     tr("File has been opened, you can't open another one!\n"
+		"If you really want to do it, please restart this program."));
+	return ;
+    }
     m_fileName = QFileDialog::getOpenFileName(this, tr("Open File"),
 					      ".",  tr("XML files (*.xml)"));
-
     if(m_memberModel->readFromXml(m_fileName)) {
 	m_memberView->setModel(m_memberModel);
 	int width = m_memberView->width() / m_memberModel->columnCount();
 	for(int i = 0; i < m_memberModel->columnCount(); ++i) {
 	    m_memberView->setColumnWidth(i,width-3);
 	}
+    }else {
+	m_fileName.clear();
     }
 }
 
@@ -52,5 +60,6 @@ void MainWindow::saveFile()
 
 void MainWindow::addMember()
 {
-    m_memberModel->appendMember();
+    if(m_memberView->model())
+	m_memberModel->appendMember();
 }

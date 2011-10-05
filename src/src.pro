@@ -17,10 +17,10 @@ RESOURCES += pics/pixmaps.qrc
 HEADERS += MainWindow.h    \
            MemberArray.h   \  
            MemberModel.h   \
-           SubmitThread.h
+           SubmitManager.h
 
 SOURCES += main.cpp        \
            MainWindow.cpp  \
            MemberArray.cpp \
            MemberModel.cpp \
-           SubmitThread.cpp
+           SubmitManager.cpp

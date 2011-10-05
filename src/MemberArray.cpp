@@ -72,7 +72,7 @@ void MemberArray::submit()
 	   !m_memberArray[i][1].toString().isEmpty()) 
 	{
 	    qDebug("SBM: %s", qPrintable(m_memberArray[i][1].toString()));
-	    m_submitThread.submit(m_memberArray[i][1].toString());
+	    m_submitManager.submit(m_memberArray[i][1].toString());
 	    m_memberArray[i].setSubmitted(true);
 	}
     }
