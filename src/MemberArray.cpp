@@ -123,14 +123,11 @@ void MemberArray::setHeaderData(const QStringList &headerData)
     m_headerData.clear();
     int i = 0;
     QList<QString>::const_iterator itr = headerData.begin();
-    qDebug("Headers:");
     while(itr != headerData.end()) {
-	qDebug("%s",qPrintable(*itr));
 	m_headerData.append(QPair<int, QVariant>(i,(*itr)));
 	++i;
 	++itr;
     }
-    qDebug("^^Headers.");
 }
 
 bool MemberArray::replaceHeaderData(int c1, int c2)

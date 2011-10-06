@@ -20,11 +20,13 @@ public slots:
     void saveFile();
     void addMember();
     void adjustHeaderWidth();
+    void updateAmount();
 protected:
     virtual void resizeEvent(QResizeEvent * event);
 
     MemberModel  *m_memberModel;
 };
 
+extern MainWindow *g_MainWindow;
 
 #endif//_MAINWINDOW_H_

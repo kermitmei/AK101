@@ -18,6 +18,9 @@ public:
     bool writeToXml(const QString &fileName = QString())
     { return m_memberArray.writeToXml(fileName);   }
 
+    int submittedSize() const
+    { return m_memberArray.submittedSize(); }
+
     virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
     virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
     virtual QVariant data(const QModelIndex&, int) const;

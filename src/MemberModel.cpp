@@ -86,7 +86,6 @@ void MemberModel::appendMember()
     beginInsertRows(rowIndex, row, row );
     m_memberArray.appendMember(Member(m_memberArray.headerSize()));
     endInsertRows();
-    qDebug("rowCount =%d, size=%d",rowCount(),m_memberArray.size());
 }
 
 void MemberModel::submitMember()

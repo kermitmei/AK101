@@ -26,12 +26,16 @@ public:
 
     void submit(int index, Member *member);
 
+    int submittedSize() const
+    { return m_submittedSize; }
+
 protected slots:
     void replied(QNetworkReply * reply);
 
 protected:
     QString          m_passwd;
     QUrl             m_url;
+    int              m_submittedSize;
     QHash<QNetworkReply *, Member *>  m_submitHTable;
 };
 

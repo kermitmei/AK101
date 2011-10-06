@@ -51,6 +51,9 @@ public:
     bool readFromXml(const QString &fileName);
     bool writeToXml(const QString &fileName);
 
+    int submittedSize() const
+    { return m_submitManager.submittedSize(); }
+
     int headerSize() const
     { return m_headerData.size(); }
 

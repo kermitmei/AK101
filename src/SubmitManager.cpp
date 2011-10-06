@@ -1,12 +1,14 @@
 #include "SubmitManager.h"
 #include "MemberArray.h"
+#include "MainWindow.h"
 
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>
 #include <QNetworkReply>
 
 SubmitManager::SubmitManager(QObject *parent)
-    : QNetworkAccessManager(parent)
+    : QNetworkAccessManager(parent),
+      m_submittedSize(0)
 {
     connect(this, SIGNAL(finished(QNetworkReply *)),
 	    this, SLOT(replied(QNetworkReply *)));
@@ -23,7 +25,9 @@ void SubmitManager::replied(QNetworkReply * reply)
        && reply->error() == QNetworkReply::NoError) 
     {
 	m_submitHTable[reply]->setSubmitted(true);
-	qDebug("SUBMIT: %s", qPrintable(reply->url().toString()));
+	++m_submittedSize;
+	if(g_MainWindow)
+	    g_MainWindow->updateAmount();
     }
     m_submitHTable.remove(reply);
     reply->deleteLater();

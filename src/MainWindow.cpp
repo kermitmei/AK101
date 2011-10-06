@@ -7,10 +7,18 @@
 
 #define  QSS_FILE  "./style.qss"
 
+MainWindow *g_MainWindow(0);
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), 
       m_memberModel(new MemberModel(this))
 {
+    if(g_MainWindow == 0) {
+	g_MainWindow = this;
+    } else {
+	qDebug("You created more the one MainWindow object, EXIT!");
+	exit(22);
+    }
     QFile file(QSS_FILE);
     if(file.open(QFile::ReadOnly))
 	qApp->setStyleSheet(file.readAll());
@@ -62,9 +70,6 @@ void MainWindow::openFile()
 void MainWindow::adjustHeaderWidth()
 {
     int width = m_memberView->width() / m_memberModel->columnCount();
-    qDebug("view width = %d, cc=%d mywidth = %d",
-	   m_memberView->width(),
-	   m_memberModel->columnCount(),width);
     for(int i = 0; i < m_memberModel->columnCount(); ++i) {
 	m_memberView->setColumnWidth(i,width-2);
     }
@@ -81,12 +86,27 @@ void MainWindow::saveFile()
 
 void MainWindow::addMember()
 {
-    if(m_memberView->model())
+    if(m_memberView->model()) {
 	m_memberModel->appendMember();
+	updateAmount();
+    }
 }
 
 void MainWindow::resizeEvent(QResizeEvent *event)
 {
     QMainWindow::resizeEvent(event);
     adjustHeaderWidth();
+}
+
+void MainWindow::updateAmount()
+{
+    static QString begin("<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">p, li { white-space: pre-wrap; }</style></head><body style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;\"><p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:72pt; font-weight:600; color:#0000ff;\">");
+
+    static QString internal("</span><span style=\" font-size:26pt; font-weight:600; color:#ff0000;\">/</span><span style=\" font-size:26pt; color:#00aa00;\">");
+
+    static QString end("</span></p></body></html>");
+
+    m_amountLabel->setText(begin + QString::number(m_memberModel->submittedSize()) +
+			   internal + QString::number(m_memberModel->rowCount()) +
+			   end);
 }
