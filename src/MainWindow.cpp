@@ -3,12 +3,18 @@
 
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QFile>
 
+#define  QSS_FILE  "./style.qss"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), 
       m_memberModel(new MemberModel(this))
 {
+    QFile file(QSS_FILE);
+    if(file.open(QFile::ReadOnly))
+	qApp->setStyleSheet(file.readAll());
+
     setupUi(this);
     connect(m_openAction, SIGNAL(triggered()), this, SLOT(openFile()));
     connect(m_openBtn,    SIGNAL(clicked()), this, SLOT(openFile()));

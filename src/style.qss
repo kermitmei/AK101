@@ -1,0 +1,11 @@
+QPushButton#m_addBtn:!pressed { border-image: url(:/green.png); }
+QPushButton#m_submitBtn:!pressed { border-image: url(:/green.png); }
+QPushButton#m_saveBtn:!pressed { border-image: url(:/green.png); }
+QPushButton#m_openBtn:!pressed { border-image: url(:/green.png); }
+QPushButton#m_exitBtn:!pressed { border-image: url(:/green.png); }
+
+QPushButton#m_addBtn:pressed { border-image: url(:/red.png); }
+QPushButton#m_submitBtn:pressed { border-image: url(:/red.png); }
+QPushButton#m_saveBtn:pressed { border-image: url(:/red.png); }
+QPushButton#m_openBtn:pressed { border-image: url(:/red.png); }
+QPushButton#m_exitBtn:pressed { border-image: url(:/red.png); }
