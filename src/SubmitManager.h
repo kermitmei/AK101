@@ -4,7 +4,6 @@
 #include <QNetworkAccessManager>
 #include <QList>
 #include <QString>
-#include <QMutex>
 #include <QUrl>
 
 
@@ -19,23 +18,21 @@ public:
     SubmitManager(QObject *parent = 0);
     ~SubmitManager();
 
+    void setUrl(const QString &url)
+    { m_url = url;       }
+
     void setPasswd(const QString &passwd)
     { m_passwd = passwd; }
 
-    void submit(const QString &member);
+    void submit(int index, Member *member);
 
 protected slots:
     void replied(QNetworkReply * reply);
 
 protected:
-
-    QMutex           m_mutex;
-    QList<QString>   m_memberList;
     QString          m_passwd;
     QUrl             m_url;
-
-    QNetworkReply          *m_reply;
+    QHash<QNetworkReply *, Member *>  m_submitHTable;
 };
-
 
 #endif//_SUBMITMANAGER_H_

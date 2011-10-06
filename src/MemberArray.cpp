@@ -1,4 +1,21 @@
+#include <QtXml>
+#include <QFile>
+
 #include "MemberArray.h"
+
+#define  DEF_SEP             ","
+#define  DEF_ORG             "organization"
+#define  DEF_MEM             "member"
+
+#define  SET_CFG             "./AK101.cfg"
+#define  SET_PASSWD          "passwd"
+#define  SET_URL             "url"
+#define  SET_HEADERS_SEP     "headers_septation"
+#define  SET_HEADERS         "headers" 
+#define  SET_ORG             "organization"
+#define  SET_MEMBER          "member"
+#define  SET_SUBMIT_MEMMBER  "submit_member"
+
 
 const QVariant MemberArray::m_errorInfo("###");
 
@@ -28,14 +45,66 @@ void Member::setAttribute(int index, const QVariant &attribute)
 }
 
 MemberArray::MemberArray()
+    : m_headerSep(DEF_SEP),
+      m_orgXml(DEF_ORG),
+      m_memberXml(DEF_MEM),
+      m_currSbmIndex(-1)
 {
-    ;
+    if(!loadConf()) {
+	qDebug("Load configuration failure!");
+	exit(1);
+    }else {
+	;
+    }
 }
 
 MemberArray::~MemberArray()
 {
     ;
 }
+
+bool MemberArray::loadConf()
+{
+    QVariant value;
+    QSettings settings(SET_CFG,QSettings::IniFormat);
+
+    value = settings.value(SET_PASSWD);
+    if(value.isValid() && !value.isNull())
+	m_submitManager.setPasswd(value.toString());
+
+    value = settings.value(SET_URL);
+    if(value.isValid() && !value.isNull())
+	m_submitManager.setUrl(value.toString());
+
+    value = settings.value(SET_HEADERS_SEP);
+    if(value.isValid() && !value.isNull()) {
+	m_headerSep = value.toString();
+	qDebug("sep: %s", qPrintable(m_headerSep));
+    }
+
+    value = settings.value(SET_HEADERS);
+    if(value.isValid() && !value.isNull()) {
+	setHeaderData(value.toString().split(m_headerSep));
+    }else {
+	qDebug("You must set the headers in "SET_CFG);
+	return false;
+    }
+
+    value = settings.value(SET_ORG);
+    if(value.isValid() && !value.isNull())
+	m_memberXml = value.toString();
+
+    value = settings.value(SET_MEMBER);
+    if(value.isValid() && !value.isNull())
+	m_orgXml = value.toString();
+
+    value = settings.value(SET_SUBMIT_MEMMBER);
+    if(value.isValid() && !value.isNull())
+	m_sbmMemberXml = value.toString();
+
+    return true;
+}
+
 
 const QVariant &MemberArray::headerData(int section) const
 {
@@ -45,12 +114,19 @@ const QVariant &MemberArray::headerData(int section) const
 	return m_headerData[section].second;
 }
 
-void MemberArray::setHeaderData(const QVector<QVariant> &headerData)
+void MemberArray::setHeaderData(const QStringList &headerData)
 {
     m_headerData.clear();
-    for(int i = 0; i < headerData.size(); ++i) {
-	m_headerData.append(QPair<int, QVariant>(i,headerData[i]));
+    int i = 0;
+    QList<QString>::const_iterator itr = headerData.begin();
+    qDebug("Headers:");
+    while(itr != headerData.end()) {
+	qDebug("%s",qPrintable(*itr));
+	m_headerData.append(QPair<int, QVariant>(i,(*itr)));
+	++i;
+	++itr;
     }
+    qDebug("^^Headers.");
 }
 
 bool MemberArray::replaceHeaderData(int c1, int c2)
@@ -66,14 +142,87 @@ bool MemberArray::replaceHeaderData(int c1, int c2)
 
 void MemberArray::submit()
 {
-    qDebug(" MemberArray::submit()");
+    m_currSbmIndex = indexOfHeader(m_sbmMemberXml);
+    if(m_currSbmIndex < 0 || m_currSbmIndex > headerSize())
+	return ;
+
     for(int i = 0; i < m_memberArray.size(); ++i) {
 	if(!m_memberArray[i].isSubmitted() && 
-	   !m_memberArray[i][1].toString().isEmpty()) 
+	   !m_memberArray[i][m_currSbmIndex].toString().isEmpty()) 
 	{
-	    qDebug("SBM: %s", qPrintable(m_memberArray[i][1].toString()));
-	    m_submitManager.submit(m_memberArray[i][1].toString());
-	    m_memberArray[i].setSubmitted(true);
+	    m_submitManager.submit(m_currSbmIndex, &m_memberArray[i]);
 	}
     }
+}
+
+bool MemberArray::readFromXml(const QString &fileName)
+{
+    QFile file(fileName);
+
+    if(!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+	qDebug() << "File open error!";
+	return false;
+    }
+
+    QXmlStreamReader  xmlReader;
+    xmlReader.setDevice(&file);
+    QString xmlName;
+    int index;
+    //Read the Elements
+    while(!xmlReader.atEnd()) {
+	xmlName = xmlReader.name().toString();
+	if(xmlReader.isStartElement()) {
+	    if(xmlName == m_memberXml) {
+		m_memberArray.append(Member(headerSize()));
+	    }else if(xmlName != m_orgXml) {
+		index = indexOfHeader(xmlName);
+		if(index >= 0 && index < headerSize())
+		    m_memberArray.last()[index] = xmlReader.readElementText();
+	    }else { //xmlName == m_orgXml, then  ignore
+		;
+	    }
+	}
+	xmlReader.readNext();
+    }
+    return true;
+}
+
+bool MemberArray::writeToXml(const QString &fileName)
+{
+    QFile file(fileName);
+    if(!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+	qDebug() << "Write file error!";
+	return false;
+    }
+
+    QXmlStreamWriter  xmlWriter(&file);
+    xmlWriter.setAutoFormatting(true);
+    xmlWriter.writeStartDocument();
+    xmlWriter.writeStartElement(m_orgXml);
+
+
+    QVector<Member>::const_iterator itrMem = m_memberArray.begin();
+    while(itrMem != m_memberArray.end()) {
+	xmlWriter.writeStartElement(m_memberXml);  //START: m_memberXml
+	for(int i = 0; i < m_headerData.size(); ++i) {
+	    xmlWriter.writeTextElement(m_headerData[i].second.toString(),
+				       (*itrMem)[m_headerData[i].first].toString());
+	}
+	xmlWriter.writeEndElement();               //END:   m_memberXml
+	++itrMem;
+    }
+    xmlWriter.writeEndElement(); // m_orgXml
+    xmlWriter.writeEndDocument();
+    return true;
+}
+
+int MemberArray::indexOfHeader(const QString &header) const
+{
+    QVector<QPair<int, QVariant> >::const_iterator itr = m_headerData.begin();
+    while(itr != m_headerData.end()) {
+	if(itr->second == header)
+	    return itr->first;
+	++itr;
+    }
+    return -1;
 }
