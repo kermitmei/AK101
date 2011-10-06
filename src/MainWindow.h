@@ -5,6 +5,7 @@
 #include "ui_MainWindow.h"
 
 class MemberModel;
+class QResizeEvent;
 
 class MainWindow : public QMainWindow,
 		   public Ui::MainWindow
@@ -18,10 +19,11 @@ public slots:
     void openFile();
     void saveFile();
     void addMember();
-
+    void adjustHeaderWidth();
 protected:
+    virtual void resizeEvent(QResizeEvent * event);
+
     MemberModel  *m_memberModel;
-    QString       m_fileName;
 };
 
 

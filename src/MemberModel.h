@@ -12,10 +12,10 @@ public:
     MemberModel(QObject *parent = 0);
     ~MemberModel();
 
-    bool readFromXml(const QString &fileName)
+    bool readFromXml(const QString &fileName = QString())
     { return m_memberArray.readFromXml(fileName);  }
 
-    bool writeToXml(const QString &fileName)
+    bool writeToXml(const QString &fileName = QString())
     { return m_memberArray.writeToXml(fileName);   }
 
     virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;

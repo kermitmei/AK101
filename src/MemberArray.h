@@ -118,6 +118,7 @@ public:
 protected:
     static const QVariant		m_errorInfo;
     QString                             m_headerSep;      //The header septation
+    QString                             m_xmlFileName;    //The xml file name
     QString                             m_orgXml;         //The organization's name
     QString                             m_memberXml;      //The organization's name
     QString                             m_sbmMemberXml;   //The submit member's name

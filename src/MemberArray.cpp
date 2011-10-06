@@ -7,7 +7,8 @@
 #define  DEF_ORG             "organization"
 #define  DEF_MEM             "member"
 
-#define  SET_CFG             "./AK101.cfg"
+#define  SET_CFG_FN          "./AK101.cfg"
+#define  SET_XML_FN          "xml_filename"
 #define  SET_PASSWD          "passwd"
 #define  SET_URL             "url"
 #define  SET_HEADERS_SEP     "headers_septation"
@@ -66,8 +67,12 @@ MemberArray::~MemberArray()
 bool MemberArray::loadConf()
 {
     QVariant value;
-    QSettings settings(SET_CFG,QSettings::IniFormat);
+    QSettings settings(SET_CFG_FN,QSettings::IniFormat);
 
+    value = settings.value(SET_XML_FN);
+    if(value.isValid() && !value.isNull())
+	m_xmlFileName = value.toString();
+    
     value = settings.value(SET_PASSWD);
     if(value.isValid() && !value.isNull())
 	m_submitManager.setPasswd(value.toString());
@@ -79,14 +84,13 @@ bool MemberArray::loadConf()
     value = settings.value(SET_HEADERS_SEP);
     if(value.isValid() && !value.isNull()) {
 	m_headerSep = value.toString();
-	qDebug("sep: %s", qPrintable(m_headerSep));
     }
 
     value = settings.value(SET_HEADERS);
     if(value.isValid() && !value.isNull()) {
 	setHeaderData(value.toString().split(m_headerSep));
     }else {
-	qDebug("You must set the headers in "SET_CFG);
+	qDebug("You must set the headers in "SET_CFG_FN);
 	return false;
     }
 
@@ -157,19 +161,29 @@ void MemberArray::submit()
 
 bool MemberArray::readFromXml(const QString &fileName)
 {
-    QFile file(fileName);
+    if(!fileName.isNull()) {
+	m_xmlFileName = fileName;
+    }else {
+	QFile file(m_xmlFileName);	
+	file.open(QIODevice::ReadWrite | QIODevice::Text);
+	file.close();
+	return true;
+    }
 
+    QFile file(m_xmlFileName);
     if(!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
 	qDebug() << "File open error!";
 	return false;
     }
 
+    m_memberArray.clear();
     QXmlStreamReader  xmlReader;
     xmlReader.setDevice(&file);
     QString xmlName;
     int index;
     //Read the Elements
     while(!xmlReader.atEnd()) {
+	qDebug("xmlReader is reading ...");
 	xmlName = xmlReader.name().toString();
 	if(xmlReader.isStartElement()) {
 	    if(xmlName == m_memberXml) {
@@ -189,7 +203,10 @@ bool MemberArray::readFromXml(const QString &fileName)
 
 bool MemberArray::writeToXml(const QString &fileName)
 {
-    QFile file(fileName);
+    if(!fileName.isEmpty())
+	m_xmlFileName = fileName;
+
+    QFile file(m_xmlFileName);
     if(!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
 	qDebug() << "Write file error!";
 	return false;
