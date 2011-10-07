@@ -21,6 +21,9 @@ public slots:
     void addMember();
     void adjustHeaderWidth();
     void updateAmount();
+    void showMessage(const QString & message, int timeout = 0);
+    void submittedAndSave();
+
 protected:
     virtual void resizeEvent(QResizeEvent * event);
 

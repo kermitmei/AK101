@@ -7,6 +7,8 @@
 #define  DEF_ORG             "organization"
 #define  DEF_MEM             "member"
 
+#define  SUB_ATTR            "isSubmitted"
+
 #define  SET_CFG_FN          "./AK101.cfg"
 #define  SET_XML_FN          "xml_filename"
 #define  SET_PASSWD          "passwd"
@@ -105,7 +107,7 @@ bool MemberArray::loadConf()
     value = settings.value(SET_SUBMIT_MEMMBER);
     if(value.isValid() && !value.isNull())
 	m_sbmMemberXml = value.toString();
-
+    m_currSbmIndex = indexOfHeader(m_sbmMemberXml);
     return true;
 }
 
@@ -160,15 +162,10 @@ bool MemberArray::readFromXml(const QString &fileName)
 {
     if(!fileName.isNull()) {
 	m_xmlFileName = fileName;
-    }else {
-	QFile file(m_xmlFileName);	
-	file.open(QIODevice::ReadWrite | QIODevice::Text);
-	file.close();
-	return true;
     }
 
     QFile file(m_xmlFileName);
-    if(!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+    if(!file.open(QIODevice::ReadWrite | QIODevice::Text)) {
 	qDebug() << "File open error!";
 	return false;
     }
@@ -180,11 +177,16 @@ bool MemberArray::readFromXml(const QString &fileName)
     int index;
     //Read the Elements
     while(!xmlReader.atEnd()) {
-	qDebug("xmlReader is reading ...");
 	xmlName = xmlReader.name().toString();
 	if(xmlReader.isStartElement()) {
 	    if(xmlName == m_memberXml) {
 		m_memberArray.append(Member(headerSize()));
+		if(xmlReader.attributes()
+		   .value(SUB_ATTR).toString() == QString("true")) {
+		    qDebug("true");
+		    m_memberArray.last().setSubmitted(true);
+		    m_submitManager.addSubmittedSize();
+		}
 	    }else if(xmlName != m_orgXml) {
 		index = indexOfHeader(xmlName);
 		if(index >= 0 && index < headerSize())
@@ -218,6 +220,8 @@ bool MemberArray::writeToXml(const QString &fileName)
     QVector<Member>::const_iterator itrMem = m_memberArray.begin();
     while(itrMem != m_memberArray.end()) {
 	xmlWriter.writeStartElement(m_memberXml);  //START: m_memberXml
+	xmlWriter.writeAttribute(SUB_ATTR,
+				 itrMem->isSubmitted() ? "true" : "false");
 	for(int i = 0; i < m_headerData.size(); ++i) {
 	    xmlWriter.writeTextElement(m_headerData[i].second.toString(),
 				       (*itrMem)[m_headerData[i].first].toString());

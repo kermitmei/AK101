@@ -42,6 +42,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     m_memberModel->readFromXml();
     m_memberView->setModel(m_memberModel);
+
+    updateAmount();
     adjustHeaderWidth();
 }
 
@@ -75,12 +77,26 @@ void MainWindow::adjustHeaderWidth()
     }
 }
 
+void MainWindow::showMessage(const QString & message, int timeout)
+{
+    statusBar()->showMessage(message, timeout);
+}
+
 void MainWindow::saveFile()
 {
     if(m_memberModel->writeToXml()) {
-	QMessageBox::information(this, tr("Save File"),tr("File saved!"));
+	showMessage(tr("File saved!"));
     }else {
-	QMessageBox::warning(this, tr("Save File"),tr("Save File Error!"));
+	showMessage(tr("Save File Error!"));
+    }
+}
+
+void MainWindow::submittedAndSave()
+{
+    if(m_memberModel->writeToXml()) {
+	showMessage(tr("Submitted, and file saved!"));
+    }else {
+	showMessage(tr("Submitted, but can't save file!"));
     }
 }
 

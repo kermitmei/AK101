@@ -19,15 +19,18 @@ SubmitManager::~SubmitManager()
     ;
 }
 
-void SubmitManager::replied(QNetworkReply * reply)
+void SubmitManager::replied(QNetworkReply *reply)
 {
     if(m_submitHTable.contains(reply) 
        && reply->error() == QNetworkReply::NoError) 
     {
 	m_submitHTable[reply]->setSubmitted(true);
 	++m_submittedSize;
-	if(g_MainWindow)
+	if(g_MainWindow) {
 	    g_MainWindow->updateAmount();
+	    g_MainWindow->showMessage(tr("mem has been submitted!"));
+	    g_MainWindow->submittedAndSave();
+	}
     }
     m_submitHTable.remove(reply);
     reply->deleteLater();

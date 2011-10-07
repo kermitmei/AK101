@@ -29,6 +29,9 @@ public:
     int submittedSize() const
     { return m_submittedSize; }
 
+    void addSubmittedSize(int addSize = 1)
+    { m_submittedSize += addSize; }
+
 protected slots:
     void replied(QNetworkReply * reply);
 
