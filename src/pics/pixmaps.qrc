@@ -1,5 +1,6 @@
 <RCC>
   <qresource>
+    <file>background.png</file>
     <file>red.png</file>
     <file>green.png</file>
     <file>szdiy_logo.png</file>

@@ -43,7 +43,7 @@ MainWindow::MainWindow(QWidget *parent)
 	    this,               SLOT(setShowMode(bool )));
 
     m_memberView->setVerticalScrollMode(QAbstractItemView::ScrollPerItem);
-
+    m_memberView->setAlternatingRowColors(true);
     m_memberModel->readFromXml();
     m_memberView->setModel(m_memberModel);
 

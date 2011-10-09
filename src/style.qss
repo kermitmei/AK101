@@ -1,3 +1,7 @@
+QMainWindow {
+    background-image: url(:/background.png);
+}
+
 QPushButton#m_addBtn:!pressed { border-image: url(:/green.png); }
 QPushButton#m_submitBtn:!pressed { border-image: url(:/green.png); }
 QPushButton#m_saveBtn:!pressed { border-image: url(:/green.png); }
