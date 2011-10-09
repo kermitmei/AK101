@@ -183,7 +183,6 @@ bool MemberArray::readFromXml(const QString &fileName)
 		m_memberArray.append(Member(headerSize()));
 		if(xmlReader.attributes()
 		   .value(SUB_ATTR).toString() == QString("true")) {
-		    qDebug("true");
 		    m_memberArray.last().setSubmitted(true);
 		    m_submitManager.addSubmittedSize();
 		}

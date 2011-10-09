@@ -4,6 +4,7 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QFile>
+#include <QDateTime>
 
 #define  QSS_FILE  "./style.qss"
 
@@ -11,7 +12,8 @@ MainWindow *g_MainWindow(0);
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), 
-      m_memberModel(new MemberModel(this))
+      m_memberModel(new MemberModel(this)),
+      m_mainTimerId(0)
 {
     if(g_MainWindow == 0) {
 	g_MainWindow = this;
@@ -26,10 +28,8 @@ MainWindow::MainWindow(QWidget *parent)
     setupUi(this);
     connect(m_openAction, SIGNAL(triggered()), this, SLOT(openFile()));
     connect(m_openBtn,    SIGNAL(clicked()), this, SLOT(openFile()));
-
     connect(m_saveAction, SIGNAL(triggered()), this, SLOT(saveFile()));
     connect(m_saveBtn,    SIGNAL(clicked()), this, SLOT(saveFile()));
-
     connect(m_submitAction, SIGNAL(triggered()), m_memberModel,  SLOT(submitMember()));
     connect(m_submitBtn,    SIGNAL(clicked()), m_memberModel,  SLOT(submitMember()));
 
@@ -38,12 +38,18 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(m_exitAction, SIGNAL(triggered()), this, SLOT(close()));
     connect(m_exitBtn,    SIGNAL(clicked()), this, SLOT(close()));
+
+    connect(m_fullScreenAction, SIGNAL(triggered(bool)),
+	    this,               SLOT(setShowMode(bool )));
+
     m_memberView->setVerticalScrollMode(QAbstractItemView::ScrollPerItem);
 
     m_memberModel->readFromXml();
     m_memberView->setModel(m_memberModel);
 
     updateAmount();
+    updateDateTime();
+    m_mainTimerId = startTimer(1000);  //1s
     adjustHeaderWidth();
 }
 
@@ -71,9 +77,9 @@ void MainWindow::openFile()
 
 void MainWindow::adjustHeaderWidth()
 {
-    int width = m_memberView->width() / m_memberModel->columnCount();
+    int width = (m_memberView->width() - 18) / m_memberModel->columnCount();
     for(int i = 0; i < m_memberModel->columnCount(); ++i) {
-	m_memberView->setColumnWidth(i,width-2);
+	m_memberView->setColumnWidth(i,width);
     }
 }
 
@@ -116,13 +122,37 @@ void MainWindow::resizeEvent(QResizeEvent *event)
 
 void MainWindow::updateAmount()
 {
-    static QString begin("<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">p, li { white-space: pre-wrap; }</style></head><body style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;\"><p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:72pt; font-weight:600; color:#0000ff;\">");
+    m_submitLcdNumber->display(m_memberModel->submittedSize());
+    m_amountLcdNumber->display(m_memberModel->rowCount());
+}
 
-    static QString internal("</span><span style=\" font-size:26pt; font-weight:600; color:#ff0000;\">/</span><span style=\" font-size:26pt; color:#00aa00;\">");
+void MainWindow::setShowMode(bool isFullScreen)
+{
+    if(isFullScreen)
+	showFullScreen();
+    else
+	showNormal();
+}
 
-    static QString end("</span></p></body></html>");
+void MainWindow::timerEvent(QTimerEvent *event)
+{
+    updateAmount();
+    if(event->timerId() == m_mainTimerId) {
+	updateDateTime();
+    }else {
+	QMainWindow::timerEvent(event);
+    }
+}
 
-    m_amountLabel->setText(begin + QString::number(m_memberModel->submittedSize()) +
-			   internal + QString::number(m_memberModel->rowCount()) +
-			   end);
+void MainWindow::updateDateTime()
+{
+    static bool tmpFlag = true;
+    QDateTime dateTime = QDateTime::currentDateTime();
+
+    m_dateLabel->setText(dateTime.toString("yyyy-MM-dd"));
+    if(tmpFlag)
+	m_timeDayLabel->setText(dateTime.toString("hh:mm   ddd"));
+    else
+	m_timeDayLabel->setText(dateTime.toString("hh mm   ddd"));
+    tmpFlag = !tmpFlag;
 }

@@ -23,11 +23,14 @@ public slots:
     void updateAmount();
     void showMessage(const QString & message, int timeout = 0);
     void submittedAndSave();
-
+    void setShowMode(bool isFullScreen);
 protected:
-    virtual void resizeEvent(QResizeEvent * event);
+    virtual void resizeEvent(QResizeEvent *event);
+    virtual void timerEvent(QTimerEvent *event);
+    void updateDateTime();
 
     MemberModel  *m_memberModel;
+    int           m_mainTimerId;
 };
 
 extern MainWindow *g_MainWindow;
